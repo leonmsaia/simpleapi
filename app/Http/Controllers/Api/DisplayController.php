@@ -8,6 +8,8 @@ use App\Models\Display;
 use App\Http\Requests\StoreDisplayRequest;
 use App\Http\Requests\UpdateDisplayRequest;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 /**
  * Controller: DisplayController
@@ -17,33 +19,29 @@ use Illuminate\Http\Request;
 class DisplayController extends Controller
 {
     use AuthorizesRequests;
-    
+
     /**
-     * List displays with optional filters and pagination.
+     * List all displays for the authenticated user with optional filters.
      *
      * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * @return \Illuminate\Pagination\LengthAwarePaginator
      */
     public function index(Request $request)
     {
-        $query = Display::where('user_id', auth()->id());
+        $query = Display::where('user_id', Auth::id());
 
-        if ($request->has('name')) {
-            $query->where('name', 'like', '%'.$request->name.'%');
+        if ($request->filled('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
         }
 
-        if ($request->has('type') && in_array($request->type, ['indoor', 'outdoor'])) {
+        if ($request->filled('type')) {
             $query->where('type', $request->type);
         }
 
-        $displays = $query->paginate(
-            $request->input('perPage', 10),
-            ['*'],
-            'page',
-            $request->input('page', 1)
-        );
+        $perPage = $request->get('perPage', 10);
 
-        return response()->json($displays);
+        // Return paginator directly
+        return $query->paginate($perPage);
     }
 
     /**

@@ -32,12 +32,22 @@ return [
     | system used by the application. Typically, Eloquent is utilized.
     |
     | Supported: "session"
+    | 
+    | LatinAd Note:
+    | Here we define every authentication guard for the application.
+    | The "api" guard has been configured to use JWT for token-based
+    | authentication via Tymon\JWTAuth.
     |
     */
 
     'guards' => [
         'web' => [
             'driver' => 'session',
+            'provider' => 'users',
+        ],
+
+        'api' => [
+            'driver' => 'jwt',
             'provider' => 'users',
         ],
     ],

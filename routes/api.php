@@ -32,3 +32,36 @@ use App\Http\Controllers\AuthController;
  * }
  */
 Route::post('/login', [AuthController::class, 'login']);
+
+/**
+ * --------------------------------------------------------------------------
+ * Protected Routes (Requires JWT Authentication)
+ * --------------------------------------------------------------------------
+ *
+ * All routes in this group require a valid JWT token provided
+ * in the Authorization header as Bearer token.
+ *
+ * Header:
+ * Authorization: Bearer {access_token}
+ */
+Route::middleware('auth:api')->group(function () {
+    /**
+     * GET /api/me
+     *
+     * Returns the authenticated user's information based on the provided token.
+     *
+     * Response 200:
+     * {
+     *   "id": 1,
+     *   "name": "User Name",
+     *   "email": "user@example.com",
+     *   ...
+     * }
+     *
+     * Response 401:
+     * {
+     *   "message": "Unauthenticated."
+     * }
+     */
+    Route::get('/me', [AuthController::class, 'me']);
+});

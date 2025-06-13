@@ -34,4 +34,26 @@ class AuthController extends Controller
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }
+
+    /**
+     * Get the authenticated user.
+     *
+     * Returns the authenticated user's information based on the provided JWT token.
+     * If the token is missing or invalid, returns a 401 Unauthenticated response.
+     *
+     * @param Request $request HTTP request
+     * @return \Illuminate\Http\JsonResponse JSON response containing user data or error message
+     */
+    public function me(Request $request)
+    {
+        $user = auth()->user();
+
+        if (!$user) {
+            return response()->json([
+                'message' => 'Unauthenticated.'
+            ], 401);
+        }
+
+        return response()->json($user);
+    }
 }

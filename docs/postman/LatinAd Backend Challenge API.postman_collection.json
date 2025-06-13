@@ -1,0 +1,396 @@
+{
+	"info": {
+		"_postman_id": "2b00769d-0fea-4139-ba83-072b6b752dfb",
+		"name": "LatinAd Backend Challenge API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "291811",
+		"_collection_link": "https://leon-m-saia-agency.postman.co/workspace/Testing~6a8d3bac-3864-4c6b-85c2-257b128aa7c1/collection/291811-2b00769d-0fea-4139-ba83-072b6b752dfb?action=share&source=collection_link&creator=291811"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"token\", jsonData.access_token);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"{{email}}\",\r\n  \"password\": \"{{password}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/login",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Displays",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/displays",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List w/ Filters",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/displays?name={{filter_name}}&type={{filter_type}}&page={{filter_page}}&perPage={{filter_perPage}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "{{filter_name}}"
+						},
+						{
+							"key": "type",
+							"value": "{{filter_type}}"
+						},
+						{
+							"key": "page",
+							"value": "{{filter_page}}"
+						},
+						{
+							"key": "perPage",
+							"value": "{{filter_perPage}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Show Display",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/displays/{{display_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays",
+						"{{display_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Display",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"pm.collectionVariables.set(\"display_id\", jsonData.id);\r",
+							"pm.collectionVariables.set(\"display_to_delete\", jsonData.id);"
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Outdoor Big Screen\",\r\n  \"description\": \"Main city center screen\",\r\n  \"price_per_day\": 2500.00,\r\n  \"resolution_height\": 1080,\r\n  \"resolution_width\": 1920,\r\n  \"type\": \"outdoor\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/displays",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Display",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"Outdoor Big Screen Modified\",\r\n  \"description\": \"Main city center screen\",\r\n  \"price_per_day\": 2.00,\r\n  \"resolution_height\": 1080,\r\n  \"resolution_width\": 1920,\r\n  \"type\": \"outdoor\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{base_url}}/displays/{{display_id}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays",
+						"{{display_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Display",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{base_url}}/displays/{{display_to_delete}}",
+					"host": [
+						"{{base_url}}"
+					],
+					"path": [
+						"displays",
+						"{{display_to_delete}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/api",
+			"type": "string"
+		},
+		{
+			"key": "token",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "email",
+			"value": "demo@latinad.com",
+			"type": "string"
+		},
+		{
+			"key": "password",
+			"value": "12345678",
+			"type": "string"
+		},
+		{
+			"key": "filter_name",
+			"value": "Outdoor",
+			"type": "string"
+		},
+		{
+			"key": "filter_type",
+			"value": "indoor",
+			"type": "string"
+		},
+		{
+			"key": "filter_page",
+			"value": "1",
+			"type": "string"
+		},
+		{
+			"key": "filter_perPage",
+			"value": "10",
+			"type": "string"
+		},
+		{
+			"key": "display_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "display_to_delete",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
